@@ -1,4 +1,6 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { startStdioMcpServer } from "./transportUtils";
+import { initTools } from "./tools/initTools";
 
 export function createServer() {
   const server = new Server(
@@ -13,7 +15,9 @@ export function createServer() {
       },
     }
   );
-  
+
+  initTools(server);
+
   server.onerror = (error) => console.error("[MCP Error]", error);
   process.on("SIGINT", async () => {
     await server.close();
@@ -23,4 +27,8 @@ export function createServer() {
   return server;
 }
 
+export async function runStdioServer(): Promise<void> {
+  const server = createServer();
+  await startStdioMcpServer(server);
+}
 
