@@ -2,7 +2,7 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { startStdioMcpServer } from "./transportUtils";
 import { initTools } from "./tools/initTools";
 
-export function createServer() {
+export function createMcpServer() {
   const server = new Server(
     {
       name: "mcp-for-programmer",
@@ -28,7 +28,7 @@ export function createServer() {
 }
 
 export async function runStdioServer(): Promise<void> {
-  const server = createServer();
+  const server = createMcpServer();
   await startStdioMcpServer(server);
 }
 
