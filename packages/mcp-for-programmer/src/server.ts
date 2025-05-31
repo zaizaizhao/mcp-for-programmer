@@ -1,9 +1,11 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { startStdioMcpServer } from "./transportUtils";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { initTools } from "./tools/initTools";
+import { startStdioMcpServer, startSseMcpServer, startStreamableMcpServer } from "./transportUtils";
+
 
 export function createMcpServer() {
-  const server = new Server(
+  const server = new McpServer(
     {
       name: "mcp-for-programmer",
       version: "1.0.0",
@@ -18,7 +20,6 @@ export function createMcpServer() {
 
   initTools(server);
 
-  server.onerror = (error) => console.error("[MCP Error]", error);
   process.on("SIGINT", async () => {
     await server.close();
     process.exit(0);
@@ -32,3 +33,18 @@ export async function runStdioServer(): Promise<void> {
   await startStdioMcpServer(server);
 }
 
+export async function runSseServer(
+  endpoint = "/sse",
+  port = 3322
+): Promise<void> {
+  const server = createMcpServer();
+  await startSseMcpServer(server, endpoint, port);
+}
+
+export async function runStreamableServer(
+  endpoint = "/mcp",
+  port = 3322
+): Promise<void> {
+  const server = createMcpServer();
+  await startStreamableMcpServer(server, endpoint, port);
+}

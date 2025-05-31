@@ -1,0 +1,44 @@
+# 工具到提示词的映射配置
+# 每个工具定义包含：
+# - toolName: 工具名称
+# - promptName: 对应的提示词名称
+# - description: 工具描述
+# - usage: 使用场景说明
+
+mappings:
+  - toolName: explainCode
+    promptName: code-explainer
+    description: 解释代码片段，分析其功能、结构、技术栈和最佳实践
+    usage: 当用户请求解释某段代码，理解代码功能，分析代码结构，或询问代码中使用的编程概念和技术栈时使用
+    parameters:
+      - name: code
+        type: string
+        description: 需要解释的代码片段
+        required: true
+      - name: language
+        type: string
+        description: 代码的编程语言，如javascript, python等
+        required: false
+      - name: context
+        type: string
+        description: 代码的背景信息或用途
+        required: false
+
+  # 可以添加更多工具映射
+  - toolName: translateText
+    promptName: text-translator
+    description: 翻译文本内容到指定语言
+    usage: 当用户需要将文本从一种语言翻译到另一种语言时使用
+    parameters:
+      - name: text
+        type: string
+        description: 需要翻译的文本
+        required: true
+      - name: targetLanguage
+        type: string
+        description: 目标语言，如中文、英语、日语等
+        required: true
+      - name: sourceLanguage
+        type: string
+        description: 源语言，如果不提供则自动检测
+        required: false 

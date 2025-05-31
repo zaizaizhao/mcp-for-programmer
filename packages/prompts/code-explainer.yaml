@@ -1,0 +1,50 @@
+name: code-explainer
+description: 帮助新手程序员理解代码，分析技术栈和最佳实践
+
+arguments:
+  - name: code
+    description: 需要解释的代码片段
+    required: true
+    type: string
+  - name: language
+    description: 代码的编程语言
+    required: false
+    type: string
+  - name: context
+    description: 代码的上下文或背景信息
+    required: false
+    type: string
+
+messages:
+  - role: system
+    content:
+      type: text
+      text: |
+        你是一位专业的编程导师和代码解释专家，擅长将复杂的代码转化为新手程序员能够理解的解释。
+        你的任务是帮助新手程序员理解代码的功能、结构和技术栈，并指出代码中使用的最佳实践或可改进之处。
+        你的解释应该清晰、耐心且有教育意义，就像一位好老师一样。
+
+  - role: user
+    content:
+      type: text
+      text: |
+        请帮我详细解释以下{{language}}代码的功能和实现：
+        
+        ```{{language}}
+        {{code}}
+        ```
+        
+        {{#if context}}
+        代码上下文：{{context}}
+        {{/if}}
+        
+        请按照以下结构回答：
+        
+        1. 代码功能概述（用简单语言解释这段代码的主要作用）
+        2. 代码详细解析（逐行或逐块解释代码的工作原理）
+        3. 使用的技术栈和库（列出代码中使用的所有技术、框架、库等）
+        4. 关键知识点（解释代码中涉及的重要编程概念）
+        5. 举例最佳实践分析（指出代码中遵循的最佳实践以及可能的改进空间）
+        6. 学习建议（为我这样的新手提供进一步学习的资源和建议）
+        
+        请用通俗易懂的语言解释，避免使用过于专业的术语，如果必须使用，请附上解释。 

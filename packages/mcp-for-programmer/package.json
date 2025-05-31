@@ -7,6 +7,7 @@
     "start": "ts-node src/index.ts",
     "start:express": "cross-env START_EXPRESS=true ts-node -r ./src/index.ts",
     "dev": "nodemon --exec npx @modelcontextprotocol/inspector ts-node src/index.ts",
+    "dev:sse": "nodemon --exec npx @modelcontextprotocol/inspector ts-node src/index.ts --transport sse --port 3322 --endpoint /sse",
     "dev:inspector": "npx @modelcontextprotocol/inspector ts-node -r ./src/index.ts"
   },
   "dependencies": {

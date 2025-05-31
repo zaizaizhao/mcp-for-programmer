@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -b",
     "dev": "npx @modelcontextprotocol/inspector ts-node -r ./packages/mcp-for-programmer/src/index.ts",
+    "dev:sse": "nodemon --exec ts-node ./packages/mcp-for-programmer/src/index.ts --transport sse --port 3322 --endpoint /sse",
     "dev:express": "cross-env START_EXPRESS=true ts-node -r ./packages/mcp-for-programmer/src/index.ts",
     "start": "node dist/index.js",
     "start:express": "cd packages/mcp-for-programmer && pnpm run start:express"
