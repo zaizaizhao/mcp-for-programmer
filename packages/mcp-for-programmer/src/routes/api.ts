@@ -1,10 +1,10 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 import yaml from 'js-yaml';
 
-const router = express.Router();
+const router:Router = express.Router();
 
 // YAML文件目录路径
 const PROMPTS_DIR = path.resolve(__dirname, '../../../prompts');

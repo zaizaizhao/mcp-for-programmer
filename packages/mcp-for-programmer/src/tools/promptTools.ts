@@ -24,7 +24,7 @@ interface PromptYaml {
 export async function loadPrompt(promptName: string): Promise<any> {
   try {
     // 构建提示词文件路径
-    const promptsDir = path.resolve(__dirname, '../../../prompts');
+    const promptsDir = path.resolve(__dirname, '../../.././prompts');
     const promptPath = path.join(promptsDir, `${promptName}.yaml`);
     
     // 读取YAML文件
@@ -42,7 +42,7 @@ export async function loadPrompt(promptName: string): Promise<any> {
 // 获取prompts目录中的所有YAML文件
 export async function getAllPromptFiles(): Promise<string[]> {
   try {
-    const promptsDir = path.resolve(__dirname, '../../../prompts');
+    const promptsDir = path.resolve(__dirname, '../../.././prompts');
     const files = await fs.promises.readdir(promptsDir);
     return files.filter(file => file.endsWith('.yaml'));
   } catch (error) {
@@ -54,6 +54,12 @@ export async function getAllPromptFiles(): Promise<string[]> {
 // 创建Zod验证模式
 function createZodSchema(args: PromptArgument[]) {
   const schema: Record<string, any> = {};
+  
+  // 如果args未定义或不是数组，返回空对象
+  if (!args || !Array.isArray(args)) {
+    console.warn("警告: 提示词参数未定义或不是数组");
+    return schema;
+  }
   
   args.forEach(arg => {
     let validator: any;
@@ -177,11 +183,23 @@ export function registerCodeExplainerPrompt(server: McpServer) {
 // 为提示词自动创建工具
 export async function createToolForPrompt(server: McpServer, promptFile: string) {
   try {
+    // 跳过tool-mappings.yaml文件
+    if (promptFile === 'tool-mappings.yaml') {
+      console.log("跳过 tool-mappings.yaml 文件");
+      return true;
+    }
+    
     // 加载提示词YAML
-    const promptsDir = path.resolve(__dirname, '../../../prompts');
+    const promptsDir = path.resolve(__dirname, '../../.././prompts');
     const promptPath = path.join(promptsDir, promptFile);
     const fileContent = await fs.promises.readFile(promptPath, 'utf8');
     const promptData = yaml.load(fileContent) as PromptYaml;
+    
+    // 检查是否有效的提示词文件
+    if (!promptData || !promptData.name) {
+      console.warn(`警告: ${promptFile} 不是有效的提示词文件`);
+      return false;
+    }
     
     // 提示词名称
     const promptName = promptData.name;
@@ -190,7 +208,7 @@ export async function createToolForPrompt(server: McpServer, promptFile: string)
     const toolName = promptName;
     
     // 创建参数验证模式
-    const schema = createZodSchema(promptData.arguments);
+    const schema = createZodSchema(promptData.arguments || []);
     
     // 注册提示词
     // server.prompt(

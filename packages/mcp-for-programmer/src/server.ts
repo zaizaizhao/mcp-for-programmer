@@ -4,7 +4,7 @@ import { initTools } from "./tools/initTools";
 import { startStdioMcpServer, startSseMcpServer, startStreamableMcpServer } from "./transportUtils";
 
 
-export function createMcpServer() {
+export async function createMcpServer() {
   const server = new McpServer(
     {
       name: "mcp-for-programmer",
@@ -18,7 +18,8 @@ export function createMcpServer() {
     }
   );
 
-  initTools(server);
+  // 先初始化工具，确保在连接传输层前完成
+  await initTools(server);
 
   process.on("SIGINT", async () => {
     await server.close();
@@ -29,7 +30,7 @@ export function createMcpServer() {
 }
 
 export async function runStdioServer(): Promise<void> {
-  const server = createMcpServer();
+  const server = await createMcpServer();
   await startStdioMcpServer(server);
 }
 
@@ -37,7 +38,7 @@ export async function runSseServer(
   endpoint = "/sse",
   port = 3322
 ): Promise<void> {
-  const server = createMcpServer();
+  const server = await createMcpServer();
   await startSseMcpServer(server, endpoint, port);
 }
 
@@ -45,6 +46,6 @@ export async function runStreamableServer(
   endpoint = "/mcp",
   port = 3322
 ): Promise<void> {
-  const server = createMcpServer();
+  const server = await createMcpServer();
   await startStreamableMcpServer(server, endpoint, port);
 }

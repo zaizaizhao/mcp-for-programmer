@@ -9,6 +9,33 @@ A Model Context Protocol server designed to help programmers learn and understan
 [![GitHub issues](https://img.shields.io/github/issues/zaizaizhao/mcp-for-programmer.svg)](https://github.com/zaizaizhao/mcp-for-programmer/issues)
 [![License](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
 
+## Build System
+
+This project uses Rollup for library packaging, supporting the following features:
+
+- Generation of both CommonJS and ES modules formats
+- Automatic TypeScript declaration file generation
+- Watch mode for development
+- Production build optimization
+
+### Development Mode
+
+Run the following command to start development mode, which will automatically watch for file changes and build in real-time:
+
+```bash
+npm run dev
+```
+
+### Production Build
+
+Run the following command for production builds:
+
+```bash
+npm run build
+```
+
+Generated files will be output to the `dist` directory of each package.
+
 ## Project Introduction
 
 MCP-Server for Programmers is a server implementation based on the Model Context Protocol (MCP), specifically designed to help programmers understand and learn code. It can parse code through prompt templates, providing code explanations, tech stack analysis, and best practice recommendations to help novice programmers understand complex code more quickly.
@@ -35,6 +62,7 @@ MCP-Server for Programmers is a server implementation based on the Model Context
 - ✅ Template variable replacement and conditional rendering
 - ✅ Express REST API service
 - ✅ Code explainer prompt implementation
+- ✅ Rollup build system for library packaging
 
 ## Upcoming Features
 
@@ -65,16 +93,19 @@ pnpm build
 ### Starting the Server
 ```bash
 # Start with standard input/output (stdio)
-pnpm dev
+pnpm run dev
 
 # Start with SSE transport
-pnpm dev:sse
+pnpm run dev:sse
 
-# Start with Inspector
-pnpm dev:inspector
+# Start with Streamable transport
+pnpm run dev:streamable
 
-# Start with Express server
-pnpm dev:express
+# Start with Express server on a specific port
+pnpm run dev:express
+
+# Start with Inspector for debugging
+pnpm run dev:inspector
 ```
 
 ### Creating Prompt Templates
@@ -125,8 +156,12 @@ mcp-for-programmer/
 │       │   ├── transportUtils/  # Transport implementations
 │       │   ├── index.ts         # Entry file
 │       │   └── server.ts        # MCP server creation
+│       ├── dist/                # Build output (not tracked by Git)
 │       ├── prompts/             # Prompt template YAML files
 │       └── package.json
+├── scripts/
+│   ├── dev.js                   # Development build script with watch mode
+│   └── build.js                 # Production build script
 └── package.json
 ```
 
@@ -136,6 +171,7 @@ mcp-for-programmer/
 - Node.js
 - Express.js
 - Model Context Protocol (MCP)
+- Rollup (build system)
 - YAML
 - Zod (type validation)
 

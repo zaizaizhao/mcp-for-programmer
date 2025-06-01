@@ -1,12 +1,18 @@
-import { runSseServer, runStdioServer, runStreamableServer } from './server';
+import { runSseServer, runStdioServer, runStreamableServer, createMcpServer } from './server';
 import { createExpressServer } from './backend/createExpressServer';
 import { parseArgs } from 'node:util';
+
+// 导出主要API和类型
+export { createMcpServer, runSseServer, runStdioServer, runStreamableServer } from './server';
+export { createExpressServer } from './backend/createExpressServer';
+export * from './tools/initTools';
+export * from './transportUtils';
 
 // 创建Express服务器
 const { app, server } = createExpressServer();
 
 // 定义端口
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 // 判断是否是Inspector模式
 const isInspectorMode = process.argv.some(arg => arg.includes('@modelcontextprotocol/inspector'));

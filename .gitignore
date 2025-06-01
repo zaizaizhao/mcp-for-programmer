@@ -29,6 +29,10 @@ Thumbs.db
 /dist
 /build
 /out
+# 忽略所有包中的dist目录
+**/dist
+**/dist/**
+packages/*/dist
 
 # 日志文件
 logs
