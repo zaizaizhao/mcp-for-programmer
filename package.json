@@ -1,8 +1,11 @@
 {
   "name": "mcp-for-programmer",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "node scripts/build.js",
     "dev": "node scripts/dev.js",
@@ -13,7 +16,8 @@
     "dev:express": "cross-env START_EXPRESS=true node scripts/dev.js --express-port 3002",
     "dev:inspector": "npx @modelcontextprotocol/inspector ts-node -r ./packages/mcp-for-programmer/src/index.ts",
     "start": "node packages/mcp-for-programmer/dist/index.js",
-    "start:express": "cd packages/mcp-for-programmer && pnpm run start:express"
+    "start:express": "cd packages/mcp-for-programmer && pnpm run start:express",
+    "publish": "cd packages/mcp-for-programmer && pnpm publish"
   },
   "keywords": [],
   "author": "",

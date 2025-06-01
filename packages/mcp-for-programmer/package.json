@@ -6,8 +6,16 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zaizaizhao/mcp-for-programmer.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "ts-node src/index.ts",
     "start:express": "cross-env START_EXPRESS=true ts-node -r ./src/index.ts",
