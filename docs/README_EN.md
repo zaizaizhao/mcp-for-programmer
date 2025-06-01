@@ -1,6 +1,6 @@
 # MCP-Server for Programmers
 
-English | [简体中文](./README.md)
+English | [简体中文](../README.md)
 
 A Model Context Protocol server designed to help programmers learn and understand code.
 
@@ -23,7 +23,7 @@ This project uses Rollup for library packaging, supporting the following feature
 Run the following command to start development mode, which will automatically watch for file changes and build in real-time:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### Production Build
@@ -31,7 +31,7 @@ npm run dev
 Run the following command for production builds:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Generated files will be output to the `dist` directory of each package.
@@ -46,7 +46,7 @@ MCP-Server for Programmers is a server implementation based on the Model Context
 
 ## Features
 
-- 🚀 Based on MCP protocol, supporting multiple transport methods (stdio, SSE, streamable)
+- 🚀 Based on MCP protocol, supporting multiple transport methods (stdio, SSE, streamable, HTTP Stream)
 - 📝 Support for defining prompt templates via YAML files
 - 🔧 Automatic conversion of prompts to tools without manual mapping
 - 🧩 Template variable replacement with conditional rendering support
@@ -63,6 +63,7 @@ MCP-Server for Programmers is a server implementation based on the Model Context
 - ✅ Express REST API service
 - ✅ Code explainer prompt implementation
 - ✅ Rollup build system for library packaging
+- ✅ HTTP Stream method for calling MCP server
 
 ## Upcoming Features
 
@@ -98,7 +99,7 @@ pnpm run dev
 # Start with SSE transport
 pnpm run dev:sse
 
-# Start with Streamable transport
+# Start with HTTP Stream method
 pnpm run dev:streamable
 
 # Start with Express server on a specific port
@@ -162,6 +163,9 @@ mcp-for-programmer/
 ├── scripts/
 │   ├── dev.js                   # Development build script with watch mode
 │   └── build.js                 # Production build script
+├── docs/                        # Documentation files
+│   ├── README.md                # English documentation
+│   └── xiaohongshu.html         # Promotional content for social media
 └── package.json
 ```
 

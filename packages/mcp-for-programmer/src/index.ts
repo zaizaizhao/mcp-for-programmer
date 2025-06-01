@@ -75,7 +75,6 @@ async function startServers() {
       await runStdioServer();
     } else if (transport === "sse") {
       console.log("sse 启动");
-      
       const port = Number.parseInt(values.port as string, 10);
       const endpoint = values.endpoint || "/sse";
       await runSseServer(endpoint, port);

@@ -9,7 +9,7 @@
     "dev:watch": "node scripts/dev.js",
     "dev:stdio": "node scripts/dev.js --transport stdio",
     "dev:sse": "node scripts/dev.js --transport sse --port 3322 --endpoint /sse",
-    "dev:streamable": "node scripts/dev.js --transport streamable --port 3322 --endpoint /mcp",
+    "dev:streamable": "node scripts/dev.js --transport streamable --port 3323 --endpoint /mcp",
     "dev:express": "cross-env START_EXPRESS=true node scripts/dev.js --express-port 3002",
     "dev:inspector": "npx @modelcontextprotocol/inspector ts-node -r ./packages/mcp-for-programmer/src/index.ts",
     "start": "node packages/mcp-for-programmer/dist/index.js",

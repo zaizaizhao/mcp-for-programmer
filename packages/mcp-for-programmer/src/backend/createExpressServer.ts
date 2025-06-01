@@ -3,7 +3,7 @@ import * as http from 'http';
 import cors from 'cors';
 import apiRoutes from '../routes/api';
 
-export function createExpressServer() {
+export function createExpressServer(): { app: express.Application; server: http.Server } {
   const app = express();
   
   // 中间件配置
