@@ -1,5 +1,5 @@
 {
-  "name": "mcp-for-programmer/server",
+  "name": "mcp-for-programmer",
   "version": "1.0.0",
   "description": "程序员高效学习MCP",
   "main": "dist/index.js",
