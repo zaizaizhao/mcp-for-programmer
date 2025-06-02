@@ -1,0 +1,19 @@
+name: typescript-challenge-analyzer
+description: 我正在刷typescript-challenge，根据我提供的ts代码段，分析这段TypeScript代码中使用的高级类型技术，提供最佳实践和使用场景示例，适合正在学习TypeScript类型系统的开发者
+
+arguments: []
+
+messages:
+  - role: user
+    content:
+      type: text
+      text: |
+        你是一位专业的TypeScript类型系统专家，擅长分析复杂的TypeScript类型挑战并提供清晰的解释和最佳实践。你的目标是帮助正在学习TypeScript的开发者理解高级类型技术。
+        请对这段TypeScript代码进行详细分析，我正在学习TypeScript类型系统，希望你能：
+        
+        1. 解释这段代码使用了哪些TypeScript类型技术
+        2. 分析每个类型技术的作用和工作原理
+        3. 提供这些技术的最佳实践（包含示例代码）
+        4. 给出这些类型技术的实际使用场景（包含示例代码）
+        5. 如果有更优雅的实现方式，请提供改进建议
+        6. 根据tool的提示词思考以上几点

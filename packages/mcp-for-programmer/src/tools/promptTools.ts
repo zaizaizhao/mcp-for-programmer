@@ -10,6 +10,9 @@ interface PromptArgument {
   description: string;
   required: boolean;
   type: string;
+  schema: {
+    type: string;
+  };
 }
 
 // 提示词YAML结构
@@ -111,7 +114,7 @@ function createZodSchema(args: PromptArgument[]) {
     let validator: any;
     
     // 根据参数类型创建相应的Zod验证器
-    switch (arg.type.toLowerCase()) {
+    switch (arg?.schema?.type?.toLowerCase() || arg?.type?.toLowerCase()) {
       case 'string':
         validator = z.string();
         break;
