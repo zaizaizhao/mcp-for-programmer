@@ -17,7 +17,7 @@
     "dev:inspector": "npx @modelcontextprotocol/inspector ts-node -r ./packages/mcp-for-programmer/src/index.ts",
     "start": "node packages/mcp-for-programmer/dist/index.js",
     "start:express": "cd packages/mcp-for-programmer && pnpm run start:express",
-    "publish": "cd packages/mcp-for-programmer && pnpm publish"
+    "publish-pkg": "cd packages/mcp-for-programmer && npm publish"
   },
   "keywords": [],
   "author": "",

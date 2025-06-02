@@ -23,12 +23,38 @@ interface PromptYaml {
 // 提示词加载器
 export async function loadPrompt(promptName: string): Promise<any> {
   try {
-    // 构建提示词文件路径
-    const promptsDir = path.resolve(__dirname, '../../.././prompts');
-    const promptPath = path.join(promptsDir, `${promptName}.yaml`);
+    // 构建提示词文件路径 - 尝试多个可能的位置
+    let promptsDir;
+    let promptPath;
+    let fileContent;
     
-    // 读取YAML文件
-    const fileContent = await fs.promises.readFile(promptPath, 'utf8');
+    // 尝试的路径列表
+    const pathsToTry = [
+      path.resolve(__dirname, '../../prompts'), // 开发环境中的路径
+      path.resolve(__dirname, '../prompts'),    // 生产环境中的路径
+      path.resolve(process.cwd(), 'prompts'),   // 当前工作目录下的prompts
+      path.resolve(process.cwd(), '../prompts') // 上级目录的prompts
+    ];
+    
+    // 尝试每个路径
+    for (const dir of pathsToTry) {
+      try {
+        promptPath = path.join(dir, `${promptName}.yaml`);
+        if (fs.existsSync(promptPath)) {
+          promptsDir = dir;
+          fileContent = await fs.promises.readFile(promptPath, 'utf8');
+          console.log(`成功从 ${promptPath} 加载提示词`);
+          break;
+        }
+      } catch (err) {
+        // 继续尝试下一个路径
+      }
+    }
+    
+    // 如果没有找到文件
+    if (!fileContent) {
+      throw new Error(`无法找到提示词文件 ${promptName}.yaml，已尝试路径: ${pathsToTry.join(', ')}`);
+    }
     
     // 解析YAML内容
     const promptData = yaml.load(fileContent);
@@ -42,9 +68,29 @@ export async function loadPrompt(promptName: string): Promise<any> {
 // 获取prompts目录中的所有YAML文件
 export async function getAllPromptFiles(): Promise<string[]> {
   try {
-    const promptsDir = path.resolve(__dirname, '../../.././prompts');
-    const files = await fs.promises.readdir(promptsDir);
-    return files.filter(file => file.endsWith('.yaml'));
+    // 尝试的路径列表
+    const pathsToTry = [
+      path.resolve(__dirname, '../../prompts'), // 开发环境中的路径
+      path.resolve(__dirname, '../prompts'),    // 生产环境中的路径
+      path.resolve(process.cwd(), 'prompts'),   // 当前工作目录下的prompts
+      path.resolve(process.cwd(), '../prompts') // 上级目录的prompts
+    ];
+    
+    // 尝试每个路径
+    for (const dir of pathsToTry) {
+      try {
+        if (fs.existsSync(dir)) {
+          const files = await fs.promises.readdir(dir);
+          console.log(`成功从 ${dir} 加载提示词文件列表`);
+          return files.filter(file => file.endsWith('.yaml'));
+        }
+      } catch (err) {
+        // 继续尝试下一个路径
+      }
+    }
+    
+    console.warn(`未找到prompts目录，已尝试路径: ${pathsToTry.join(', ')}`);
+    return [];
   } catch (error) {
     console.error('获取提示词文件失败:', error);
     return [];
@@ -189,10 +235,37 @@ export async function createToolForPrompt(server: McpServer, promptFile: string)
       return true;
     }
     
-    // 加载提示词YAML
-    const promptsDir = path.resolve(__dirname, '../../.././prompts');
-    const promptPath = path.join(promptsDir, promptFile);
-    const fileContent = await fs.promises.readFile(promptPath, 'utf8');
+    // 尝试的路径列表
+    const pathsToTry = [
+      path.resolve(__dirname, '../../prompts'), // 开发环境中的路径
+      path.resolve(__dirname, '../prompts'),    // 生产环境中的路径
+      path.resolve(process.cwd(), 'prompts'),   // 当前工作目录下的prompts
+      path.resolve(process.cwd(), '../prompts') // 上级目录的prompts
+    ];
+    
+    let fileContent;
+    let promptPath;
+    
+    // 尝试每个路径
+    for (const dir of pathsToTry) {
+      try {
+        promptPath = path.join(dir, promptFile);
+        if (fs.existsSync(promptPath)) {
+          fileContent = await fs.promises.readFile(promptPath, 'utf8');
+          console.log(`成功从 ${promptPath} 加载提示词文件`);
+          break;
+        }
+      } catch (err) {
+        // 继续尝试下一个路径
+      }
+    }
+    
+    // 如果没有找到文件
+    if (!fileContent) {
+      console.warn(`无法找到提示词文件 ${promptFile}，已尝试路径: ${pathsToTry.join(', ')}`);
+      return false;
+    }
+    
     const promptData = yaml.load(fileContent) as PromptYaml;
     
     // 检查是否有效的提示词文件

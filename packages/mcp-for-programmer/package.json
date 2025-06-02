@@ -1,13 +1,25 @@
 {
   "name": "mcp-for-programmer",
-  "version": "1.0.0",
+  "version": "1.0.12",
   "description": "程序员高效学习MCP",
+  "bin": {
+    "mcp-programmer-tool": "./dist/index.js"
+  },
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "type": "commonjs",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "prompts"
   ],
   "repository": {
     "type": "git",
@@ -22,7 +34,8 @@
     "dev": "nodemon --exec npx @modelcontextprotocol/inspector ts-node src/index.ts",
     "dev:sse": "nodemon --exec npx @modelcontextprotocol/inspector ts-node src/index.ts --transport sse --port 3322 --endpoint /sse",
     "dev:inspector": "npx @modelcontextprotocol/inspector ts-node -r ./src/index.ts",
-    "build": "rimraf dist && tsc"
+    "build": "node ../../scripts/build.js",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",

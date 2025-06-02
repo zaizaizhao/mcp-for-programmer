@@ -1,0 +1,97 @@
+# MCP Prompt 规范说明
+
+# 基本结构
+# 每个prompt文件应遵循以下结构:
+# - name: 提示词的唯一标识符
+# - description: 提示词的功能描述
+# - arguments: 提示词可接受的参数列表(可选)
+# - messages: 提示词的消息内容列表
+
+# 示例结构
+structure:
+  name: string  # 必填，提示词唯一标识符
+  description: string  # 必填，提示词功能描述
+  arguments:  # 可选，提示词接受的参数
+    - name: string  # 参数名称
+      description: string  # 参数描述
+      required: boolean  # 参数是否必填
+      schema:  # 参数的数据结构
+        type: string  # 参数类型(string, number, boolean, array, object)
+        enum:  # 可选，枚举值列表
+          - value1
+          - value2
+  messages:  # 必填，提示词的消息内容
+    - role: string  # 消息角色(system, user, assistant)
+      content:  # 消息内容
+        type: string  # 内容类型(text, image等)
+        text: string  # 文本内容
+
+# 字段说明
+fields:
+  name:
+    description: 提示词的唯一标识符，用于在系统中引用该提示词
+    required: true
+    example: "gen_prd_prototype_html"
+  
+  description:
+    description: 提示词的功能描述，简明扼要地说明该提示词的用途和功能
+    required: true
+    example: "基于用户提供的产品概念，自动生成结构完整的产品需求文档(PRD)和高保真交互原型"
+  
+  arguments:
+    description: 提示词接受的参数列表，定义用户可以传递给提示词的参数
+    required: false
+    example:
+      - name: "productName"
+        description: "产品名称"
+        required: true
+        schema:
+          type: "string"
+      - name: "targetUsers"
+        description: "目标用户群体"
+        required: false
+        schema:
+          type: "array"
+          items:
+            type: "string"
+  
+  messages:
+    description: 提示词的消息内容列表，按照对话顺序排列
+    required: true
+    fields:
+      role:
+        description: "消息的角色，可以是system(系统指令)、user(用户输入)或assistant(助手回复)"
+        required: true
+        enum: ["system", "user", "assistant"]
+      content:
+        description: "消息的内容，可以是文本、图像等"
+        required: true
+        fields:
+          type:
+            description: "内容的类型"
+            required: true
+            enum: ["text", "image"]
+          text:
+            description: "文本内容，当type为text时必填"
+            required: false
+          image:
+            description: "图像内容，当type为image时必填"
+            required: false
+
+# 最佳实践
+best_practices:
+  - 提示词名称应简洁明了，反映其功能
+  - 描述应详细说明提示词的用途、输入和预期输出
+  - 参数应明确定义类型和是否必填
+  - 消息内容应结构清晰，便于理解和维护
+  - 系统指令应明确定义AI的角色、任务和限制
+  - 用户输入示例应涵盖典型使用场景
+  - 助手回复示例应展示预期的输出格式和质量
+
+# 注意事项
+notes:
+  - 所有YAML文件应放置在prompts目录下
+  - 文件名应与提示词名称保持一致，使用.yaml扩展名
+  - 确保YAML格式正确，避免语法错误
+  - 避免在提示词中包含敏感信息或私有数据
+  - 定期审查和更新提示词，确保其有效性和安全性 

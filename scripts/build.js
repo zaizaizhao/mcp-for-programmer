@@ -7,6 +7,33 @@ const { dts } = require('rollup-plugin-dts');
 const path = require('path');
 const fs = require('fs');
 
+// 复制目录函数
+function copyDir(src, dest) {
+  // 确保目标目录存在
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+  
+  // 读取源目录
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  
+  // 遍历源目录中的所有文件和子目录
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    
+    // 如果是目录，递归复制
+    if (entry.isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      // 如果是文件，直接复制
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+  
+  console.log(`✅ 复制目录 ${src} 到 ${dest} 成功`);
+}
+
 // 获取所有包的路径
 const packagesDir = path.join(__dirname, '../packages');
 const packagesDirs = fs.readdirSync(packagesDir).filter(dir => {
@@ -20,6 +47,7 @@ async function build() {
   for (const pkg of packagesDirs) {
     const pkgPath = path.join(packagesDir, pkg);
     const pkgJsonPath = path.join(pkgPath, 'package.json');
+    console.log(111,pkgPath);
     
     // 检查包是否存在package.json
     if (!fs.existsSync(pkgJsonPath)) {
@@ -81,11 +109,19 @@ async function build() {
         format: 'cjs',
         sourcemap: true,
         exports: 'named',
+        banner: pkgJson.bin ? '#!/usr/bin/env node\n' : '',
       });
       
-      // 输出ES模块版本
+      // 输出ES模块版本 (.esm.js)
       await jsBundle.write({
         file: path.join(pkgPath, pkgJson.module || 'dist/index.esm.js'),
+        format: 'esm',
+        sourcemap: true,
+      });
+      
+      // 输出标准ES模块版本 (.mjs)
+      await jsBundle.write({
+        file: path.join(pkgPath, 'dist/index.mjs'),
         format: 'esm',
         sourcemap: true,
       });
@@ -115,6 +151,34 @@ async function build() {
       
       // 关闭bundle
       await dtsBundle.close();
+      
+      // 如果有bin字段，确保输出文件有执行权限
+      if (pkgJson.bin) {
+        const mainFile = path.join(pkgPath, pkgJson.main || 'dist/index.js');
+        if (fs.existsSync(mainFile)) {
+          try {
+            fs.chmodSync(mainFile, '755');
+            console.log(`✅ 为 ${mainFile} 添加了执行权限`);
+          } catch (error) {
+            console.warn(`⚠️ 无法为 ${mainFile} 添加执行权限:`, error);
+          }
+        }
+      }
+      
+      // 复制prompts目录到dist目录
+      const promptsDir = path.join(pkgPath, 'prompts');
+      const distPromptsDir = path.join(distDir, 'prompts');
+      
+      if (fs.existsSync(promptsDir)) {
+        try {
+          copyDir(promptsDir, distPromptsDir);
+          console.log(`✅ 复制 prompts 目录到 dist/prompts 成功`);
+        } catch (error) {
+          console.warn(`⚠️ 复制 prompts 目录失败:`, error);
+        }
+      } else {
+        console.log(`ℹ️ 没有找到 prompts 目录，跳过复制`);
+      }
       
       console.log(`✅ 包 ${pkg} 构建成功`);
     } catch (error) {
